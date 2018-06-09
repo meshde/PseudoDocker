@@ -8,3 +8,4 @@ pip-selfcheck.json
 .pytest_cache/
 *.swp
 containers/*
+ubuntu.tar
