@@ -1,4 +1,5 @@
 import ctypes
+import utils
 
 """
 Following Flags were obtained from /ur/include/linux/sched.h
@@ -64,14 +65,37 @@ libc = ctypes.CDLL('libc.so.6')
 def clone(callback, flags=0, args=None):
     stack = ctypes.c_char_p(" " * 8096)
     stack = ctypes.cast(stack, ctypes.c_void_p)
+
+    # Done to prevent Fatal Erorr: Inconsistent Stringed State.
+    # No clue why it happens or how the following line prevents it.
     stack = ctypes.c_void_p(stack.value + 8096)
-    if not args: 
+
+    if args:
+        CFUNC = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_void_p)
+        callback = CFUNC(callback)
+        pointer = ctypes.cast(id(args), ctypes.c_void_p)
+        res = libc.clone(callback, stack, flags, pointer)
+
+    else:
         CFUNC = ctypes.CFUNCTYPE(ctypes.c_int)
-    callback = CFUNC(callback)
-    res = libc.clone(callback, stack, flags)
+        callback = CFUNC(callback)
+        res = libc.clone(callback, stack, flags)
+
     return res
 
 def waitpid(pid, options=0):
     status = ctypes.c_int()
     libc.waitpid(pid, ctypes.byref(status), options)
     return status
+
+def get_object_from_pointer(pointer):
+    return ctypes.cast(pointer, ctypes.py_object).value
+
+def test():
+    print('Just a test bruh!')
+    __test()
+    return
+
+def __test():
+    print('Private Test MOFO!!!')
+    return
