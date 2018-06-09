@@ -1,0 +1,10 @@
+__pycache__/
+bin/
+lib/
+include/
+local/
+*.pyc
+pip-selfcheck.json
+.pytest_cache/
+*.swp
+containers/*
