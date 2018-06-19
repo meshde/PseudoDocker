@@ -10,12 +10,13 @@ import uuid
 
 CONTAINER_DIR = 'containers/'
 
-def isolate_resources():
+def isolate_resources(resources=None):
     cgroup = Cgroup('container')
-    resources  = [
-        ('cpu', 'cpu.shares', 256),
-        ('memory', 'memory.limit_in_bytes', 10000000),
-    ]
+    if not resources:
+        resources  = [
+            ('memory', 'memory.limit_in_bytes', 10000000),
+        ]
+    assert isinstance(resources, list)
     for resource, attribute, value in resources:
         cgroup.set(resource, attribute, value)
     return cgroup
