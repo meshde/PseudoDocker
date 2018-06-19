@@ -3,6 +3,8 @@ bin/
 lib/
 include/
 local/
+meshde/
+tmp/
 *.pyc
 pip-selfcheck.json
 .pytest_cache/
