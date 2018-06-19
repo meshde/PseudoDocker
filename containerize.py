@@ -14,11 +14,11 @@ def isolate_resources():
     cgroup = Cgroup('container')
     resources  = [
         ('cpu', 'cpu.shares', 256),
-        ('memory', 'memory.limit_in_bytes', 1073741824),
+        ('memory', 'memory.limit_in_bytes', 10000000),
     ]
     for resource, attribute, value in resources:
         cgroup.set(resource, attribute, value)
-    return
+    return cgroup
 
 def extract(tarf, root):
     with tarfile.open(tarf) as t:

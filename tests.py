@@ -40,3 +40,32 @@ def chroot_test():
     assert os.getcwd() == '/'
     assert os.path.exists('/meshde.txt')
     return
+
+def stress_test():
+    with open('/dev/urandom', 'r') as f:
+        f.read(150000000)
+    return
+
+def test_isolate_resources():
+    from containerize import isolate_resources
+    import os
+
+    pid = os.fork()
+
+    if pid == 0:
+        cgroup = isolate_resources()
+        stress_test()
+        assert cgroup.assigned('memory')
+        cgroup_dir = cgroup.get_cgroup_dir('memory')
+        memory_limit_path = os.path.join(cgroup_dir, 'memory.limit_in_bytes')
+        with open(memory_limit_path, 'r') as f:
+            lines = f.readlines()
+            assert isinstance(lines, list) and len(lines) == 1
+            assert int(lines[0].strip()) == 100000000
+
+    else:
+        _, status = os.waitpid(pid, 0)
+        assert status == 9
+
+def test_stress_test():
+    stress_test()
