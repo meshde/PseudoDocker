@@ -1,0 +1,9 @@
+atomicwrites==1.1.5
+attrs==18.1.0
+funcsigs==1.0.2
+more-itertools==4.2.0
+pluggy==0.6.0
+py==1.5.3
+-e git+https://github.com/meshde/pylinux@f6401c580c0a738b14f267d6cb9de8ba450911b8#egg=pyLinux
+pytest==3.6.1
+six==1.11.0
